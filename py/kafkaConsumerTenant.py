@@ -2,7 +2,7 @@ import json
 from kafka import KafkaProducer, KafkaClient, KafkaConsumer
 
 knpTenant = 'smashing'
-ipAddress = '172.22.0.1:9092'
+ipAddress = '172.22.0.1'
 
 def readsendTenant(producer, topic):
     global knpTenant
@@ -14,8 +14,8 @@ def readsendTenant(producer, topic):
             producer.send(knpTenant, key='{}'.format(topic).encode(), value=jDct)
 
 def main(): 
-    producer = KafkaProducer(bootstrap_servers=ipAddress, value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-    kafka = KafkaClient(ipAddress)
+    producer = KafkaProducer(bootstrap_servers=ipAddress+':9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+    kafka = KafkaClient(ipAddress+':9092')
     kafka.ensure_topic_exists(knpTenant)
     
     ############VIALIS##############
