@@ -13,6 +13,7 @@ portJenkins = 8084
 portKafka = 9092
 
 ####TENANT SPECIFIC#########
-ipAddress = '172.20.0.1'
-topic = 'vialis'
-dMountedDiskHost = r"/home/rakip/Documents/projects/DSHTesting/mountedDisk"
+ipAddress = 'IPADDRESS'
+ipAddressJenkins = ipAddress
+topic = 'TOPIC'
+dMountedDiskHost = r"PATHTOMOUNTEDDISK"
