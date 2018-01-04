@@ -2,7 +2,7 @@ import json
 from kafka import KafkaProducer, KafkaClient, KafkaConsumer
 
 knpTenant = 'smashing'
-ipAddress = '172.20.0.1'
+ipAddress = 'IPADDRESS'
 
 def readsendTenant(producer, topic):
     global knpTenant
