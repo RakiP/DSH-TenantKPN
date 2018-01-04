@@ -6,6 +6,7 @@ RUN apt-get install docker-compose -y
 RUN apt-get install rsync sshpass ssh-askpass -y
 RUN apt-get install openssh-client openssh-server -y
 RUN apt-get install sudo -y
+RUN apt-get install nano -y
 #RUN apt-get install python -y
 #RUN apt-get install python-pip -y
 #RUN pip install robotframework
@@ -22,6 +23,7 @@ ARG gid=1000
 ARG http_port=8084
 ARG agent_port=50000
 ARG ssh_port=22
+ARG https_port=443
 
 ENV JENKINS_HOME /var/jenkins_home
 ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
@@ -71,6 +73,7 @@ RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins/ref
 
 # for main web interface:
 EXPOSE ${http_port}
+EXPOSE ${https_port}
 
 # will be used by attached slave agents:
 EXPOSE ${agent_port}

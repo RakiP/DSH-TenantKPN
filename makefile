@@ -10,14 +10,19 @@ runnod:
 stop:
 	@cd jenkins && docker stop dockerjk
 
+chown:
+	@sudo chmod 777 /var/run/docker.sock
+
 stopkafka:
 	@docker stop dkafka
 
 runkafka:
-	@docker run --rm -d -p 2181:2181 -p 3030:3030 -p 8081:8081 -p 8082:8082 -p 8083:8083 -p 9092:9092 --net=host -e ADV_HOST=172.22.0.1 --name dkafka landoop/fast-data-dev
+	@docker run --rm -d -p 2181:2181 -p 3030:3030 -p 8081:8081 -p 8082:8082 -p 8083:8083 -p 9092:9092 --net=host -e ADV_HOST=172.20.0.1 --name dkafka landoop/fast-data-dev
 
 listen:
-	@docker run -ti --rm -d -v /home/rakeshlaptop/Documents/projects/DSH/TenantKPN/py:/py dockerkj python3 kafkaConsumerTenant.py
+	@docker run -ti --rm -d -v /home/rakip/Documents/projects/DSHTesting/DSH-TenantKPN/py:/py dockerkj python3 kafkaConsumerTenant.py
 
-chown:
-	@chmod 777 /var/run/docker.sock
+listennod:
+	@docker run -ti --rm -v /home/rakip/Documents/projects/DSHTesting/DSH-TenantKPN/py:/py dockerkj python3 kafkaConsumerTenant.py
+
+runall: chown runkafka run listennod
