@@ -1,26 +1,15 @@
-FROM openjdk:8-jdk
+# DO NOT UPGRADE alpine until https://github.com/jenkinsci/docker/issues/508 is fixed
+FROM openjdk:8u121-jdk-alpine
 
-RUN apt-get update && apt-get install -y git curl libltdl7 && rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install git curl -y
-RUN apt-get install docker-compose -y
-RUN apt-get install rsync sshpass ssh-askpass -y
-RUN apt-get install openssh-client openssh-server -y
-RUN apt-get install sudo -y
-RUN apt-get install nano -y
-#RUN apt-get install python -y
-#RUN apt-get install python-pip -y
-#RUN pip install robotframework
-#RUN curl -sSL https://get.docker.com/ | sh
-#RUN usermod -aG docker jenkins
+RUN apk add --no-cache git openssh-client curl unzip bash ttf-dejavu coreutils
 
-#RUN apt-get -yqq update && usermod -g docker jenkins
-#VOLUME /var/run/docker.sock
+RUN apk add --no-cache rsync sshpass openssh sudo nano
 
 ARG user=jenkins
 ARG group=jenkins
 ARG uid=1000
 ARG gid=1000
-ARG http_port=8084
+ARG http_port=8080
 ARG agent_port=50000
 ARG ssh_port=22
 ARG https_port=443
@@ -31,8 +20,8 @@ ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
 # Jenkins is run with user `jenkins`, uid = 1000
 # If you bind mount a volume from the host or a data container, 
 # ensure you use the same uid
-RUN groupadd -g ${gid} ${group} \
-    && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+RUN addgroup -g ${gid} ${group} \
+    && adduser -h "$JENKINS_HOME" -u ${uid} -G ${group} -s /bin/bash -D ${user}
 
 # Jenkins home directory is a volume, so configuration and build history 
 # can be persisted and survive image upgrades
@@ -83,9 +72,6 @@ EXPOSE ${ssh_port}
 
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
-USER root
-ADD sudoers.txt /etc/sudoers
-RUN chmod 440 /etc/sudoers
 USER ${user}
 
 COPY jenkins-support /usr/local/bin/jenkins-support
@@ -95,5 +81,3 @@ ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 # from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 COPY plugins.sh /usr/local/bin/plugins.sh
 COPY install-plugins.sh /usr/local/bin/install-plugins.sh
-
-#kip/Documents/KPN/DSH/work/mountedDisk /var/jenkins_home/mountedDisk
