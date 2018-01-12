@@ -1,7 +1,7 @@
 # DO NOT UPGRADE alpine until https://github.com/jenkinsci/docker/issues/508 is fixed
 FROM openjdk:8u121-jdk-alpine
 
-RUN apk add --no-cache git openssh-client curl unzip bash ttf-dejavu coreutils
+RUN apk add --no-cache git openssh-client curl unzip bash ttf-dejavu coreutils docker
 
 RUN apk add --no-cache rsync sshpass openssh sudo nano
 
