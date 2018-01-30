@@ -7,11 +7,11 @@ RUN apt-get install rsync sshpass ssh-askpass -y
 RUN apt-get install openssh-client openssh-server -y
 RUN apt-get install sudo -y
 RUN apt-get install nano -y
-#RUN apt-get install python -y
-#RUN apt-get install python-pip -y
+RUN apt-get install python -y
+#RUN apt-get install python3-pip -y
 #RUN pip install robotframework
-#RUN curl -sSL https://get.docker.com/ | sh
-#RUN usermod -aG docker jenkins
+RUN curl -sSL https://get.docker.com/ | sh
+#RUN usermod -aG docker reindrich
 
 #RUN apt-get -yqq update && usermod -g docker jenkins
 #VOLUME /var/run/docker.sock

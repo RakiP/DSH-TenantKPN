@@ -1,3 +1,24 @@
+# For tryng jenkins slaves
+* rename Dockerfile to Dockerfile-alpine
+* rename Dockerfile-small to Dockerfile
+* comment out in docker-compose file - /var/run/docker.sock:/var/run/docker.sock
+* Build docker and run compose file
+* docker exec -it dockerjk bash
+* nano /etc/default/docker
+* DOCKER_OPTS='-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock'
+* save file and exit nano 
+* source /etc/default/docker
+* dockerd "$DOCKER_OPTS"
+
+to get IP address:
+docker inspect {id = docker ps}
+
+* open Mozilla and to a rest call to http://IPADDRESS:4243/images/json
+(https://scriptcrunch.com/enable-docker-remote-api/)
+* Configure jenkins: manage-packages -> download 'yet another docker'
+* Configure this like: https://devopscube.com/docker-containers-as-build-slaves-jenkins/
+
+
 # Official Jenkins Docker image
 
 The Jenkins Continuous Integration and Delivery server.

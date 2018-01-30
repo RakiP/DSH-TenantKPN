@@ -8,9 +8,11 @@ services:
     ports:
       - "50000:50000"
       - "8084:8080"
+      - "4243:4243"
     volumes:
       - /var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       #- /usr/bin/docker:/usr/bin/docker
     container_name: dockerjk
     tty: true
+    privileged: true

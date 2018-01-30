@@ -1,9 +1,26 @@
 # DO NOT UPGRADE alpine until https://github.com/jenkinsci/docker/issues/508 is fixed
 FROM openjdk:8u121-jdk-alpine
 
-RUN apk add --no-cache git openssh-client curl unzip bash ttf-dejavu coreutils docker
+RUN apk add --no-cache git openssh-client curl unzip bash ttf-dejavu coreutils
 
-RUN apk add --no-cache rsync sshpass openssh sudo nano
+RUN apk add --no-cache rsync sshpass openssh sudo nano curl
+
+# Install the magic wrapper.
+ADD ./wrapdocker /usr/local/bin/wrapdocker
+
+# Install Docker and dependencies
+RUN apk --update add \
+  bash \
+  iptables \
+  ca-certificates \
+  e2fsprogs \
+  docker \
+  && chmod +x /usr/local/bin/wrapdocker \
+  && rm -rf /var/cache/apk/*
+
+# Define additional metadata for our image.
+VOLUME /var/lib/docker
+CMD ["wrapdocker"]
 
 ARG user=jenkins
 ARG group=jenkins
@@ -81,3 +98,5 @@ ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 # from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 COPY plugins.sh /usr/local/bin/plugins.sh
 COPY install-plugins.sh /usr/local/bin/install-plugins.sh
+
+#USER root

@@ -2,16 +2,17 @@ LISTENER:=PATHTOLISTENER
 IPREAL='IPADDRESS'
 
 build:
-	@cd jenkins && docker build -t dockerjk --network=host .
+	@cd jenkins2 && docker-compose -p jenkins2 build
+	@cd jenkins2 && docker-compose -p jenkins2 pull proxy
 
 run:
-	@cd jenkins && docker-compose up -d
+	@cd jenkins2 && docker-compose -p jenkins2 up -d nginx data master proxy
 
 runnod:
-	@cd jenkins && docker-compose up
+	@cd jenkins2 && docker-compose -p jenkins2 up nginx data master proxy
 
 stop:
-	@cd jenkins && docker stop dockerjk
+	@cd jenkins2 && docker-compose -p jenkins2 stop
 
 chown:
 	@sudo chmod 777 /var/run/docker.sock
@@ -20,7 +21,7 @@ runonce:
 	@sudo chmod 777 changeme.sh && ./changeme.sh
 
 open:
-	x-www-browser http://localhost:8084
+	x-www-browser http://localhost:80
 
 openkafka:
 	x-www-browser http://localhost:3030
@@ -40,4 +41,4 @@ listen:
 listennod:
 	@docker run -ti --rm -v $(LISTENER):/py rpartapsing/dshpython3 python3 kafkaConsumerTenant.py
 
-runall: chown run listen
+runall: chown runonce run listen
